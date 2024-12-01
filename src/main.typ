@@ -55,41 +55,7 @@
 
 #v(1fr)
 
-#context {
-  let stars = star-state.final()
-  let star-cnt = stars.values().sum(default: 0)
-  let first-weekday = datetime(
-    year: 2024,
-    month: 12,
-    day: 1
-  ).weekday()
-  let cells = ([],) * (first-weekday - 1)
-
-  for i in range(1, 26) {
-    let cell = [#i]
-    if str(i) in stars.keys() {
-      cell = stack(
-        dir: ttb,
-        spacing: 0.2em,
-        cell,
-        h(3pt) + ((emoji.star,)* stars.at(str(i))).join()
-      )
-      cell = link(label("day-" + str(i)), cell)
-    }
-
-    cells.push(cell)
-  }
-
-  [*Stars: #star-cnt / 50*]
-  table(
-    columns: (1fr,)*7,
-    inset: 0.8em,
-    align: center + horizon,
-    fill: (_, y) => if y > 0 and calc.rem(y, 2) == 0 {gray.lighten(70%)},
-    table.header([*Mon*], [*Tue*], [*Wed*], [*Thu*], [*Fri*], [*Sat*], [*Sun*]),
-    ..cells
-  )
-}
+#make-progress()
 
 #pagebreak()
 
@@ -105,4 +71,11 @@
   )
 )
 
-#make-day(1, stars: 1)
+#let progress = yaml("/progress.yaml")
+
+#for i in range(1, 26) {
+  if str(i) in progress.keys() {
+    let day = progress.at(str(i))
+    make-day(i, stars: day.stars)
+  }
+}
