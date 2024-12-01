@@ -15,25 +15,36 @@
 
 #let check-example(day, func, target-result, suffix: none) = {
   let result = (func)(read(get-example-path(day, suffix: suffix)))
-  /*assert(
-    result == target-result,
-    message: "Expected '" + repr(target-result) + "' got '" + repr(result) + "'"
-  )*/
   let passes = (result == target-result)
   let name = if suffix == none [Example] else [Example '#suffix']
-  box(
+  let badge = box(
     inset: (x: 1.2em, y: 0.6em),
     radius: 1.2em,
+    baseline: 35%,
     fill: if passes {green.lighten(20%)} else {red.lighten(20%)},
     if passes [#name passes] else [#name fails]
   )
-  h(0.6em)
+  if not passes {
+    badge = box(
+      baseline: 35%,
+      grid(
+        columns: 2,
+        align: horizon,
+      )[
+        #badge
+        Expected '#repr(target-result)' got '#repr(result)'
+      ]
+    )
+  }
+
+  [#badge #h(0.6em)]
 }
 
 #let show-result(result) = {
   box(
     inset: (x: 1.2em, y: 0.6em),
     radius: 1.2em,
+    baseline: 35%,
     fill: blue.lighten(20%),
     text(fill: white)[Result: #result]
   )
