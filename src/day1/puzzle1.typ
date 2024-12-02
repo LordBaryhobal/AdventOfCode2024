@@ -15,7 +15,7 @@
 }
 
 #show-puzzle(
-  1,
+  1, 1,
   solve,
   example: 11
 )

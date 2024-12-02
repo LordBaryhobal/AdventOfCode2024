@@ -1,5 +1,7 @@
 #let star-state = state("stars", (:))
 
+#let star = text(font: "Twitter Color Emoji", emoji.star)
+
 #let get-input-path(day) = {
   return "/res/inputs/day" + str(day) + ".txt"
 }
@@ -13,8 +15,15 @@
   return read(get-input-path(day))
 }
 
-#let check-example(day, func, target-result, suffix: none) = {
-  let result = (func)(read(get-example-path(day, suffix: suffix)))
+#let check-example(
+  day,
+  func,
+  target-result,
+  suffix: none,
+  visualize: none
+) = {
+  let input = read(get-example-path(day, suffix: suffix))
+  let result = (func)(input)
   let passes = (result == target-result)
   let name = if suffix == none [Example] else [Example '#suffix']
   let badge = box(
@@ -38,6 +47,14 @@
   }
 
   [#badge #h(0.6em)]
+
+  if visualize != none {
+    linebreak()
+    figure(
+      visualize(input),
+      caption: [#name (visualization)]
+    )
+  }
 }
 
 #let show-result(result) = {
@@ -46,30 +63,35 @@
     radius: 1.2em,
     baseline: 35%,
     fill: blue.lighten(20%),
-    text(fill: white)[Result: #result]
+    text(fill: white)[Result: #raw(repr(result))]
   )
 }
 
-#let show-puzzle(puzzle, func, example: none) = {
+#let show-puzzle(day, puzzle, func, example: none, visualize: none) = {
+  let check-example = check-example.with(visualize: visualize)
   if example != none {
     if type(example) == dictionary {
       for (suffix, result) in example.pairs() {
-        check-example(puzzle, func, result, suffix: suffix)
+        check-example(day, func, result, suffix: suffix)
       }
     } else {
-      check-example(puzzle, func, example)
+      check-example(day, func, example)
     }
     linebreak()
   }
 
-  let input = get-input(1)
+  let input = get-input(day)
   let result = (func)(input)
   show-result(result)
 }
 
 #let day-template(day, puzzle1, puzzle2, stars: 0) = {
   pagebreak(weak: true)
-  let title = [Day #day] + ((emoji.star,)*stars).join()
+  let title = [Day #day] + box(
+    baseline: -1pt,
+    ((star,)*stars).join()
+  )
+  
   [
     = #title
     #label("day-" + str(day))
@@ -108,7 +130,7 @@
         dir: ttb,
         spacing: 0.2em,
         cell,
-        h(3pt) + ((emoji.star,)* stars.at(str(i))).join()
+        ((star,)* stars.at(str(i))).join()
       )
       if links {
         cell = link(label("day-" + str(i)), cell)
