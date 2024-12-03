@@ -67,7 +67,14 @@
   )
 }
 
-#let show-puzzle(day, puzzle, func, example: none, visualize: none) = {
+#let show-puzzle(
+  day,
+  puzzle,
+  func,
+  example: none,
+  visualize: none,
+  only-example: false
+) = {
   let check-example = check-example.with(visualize: visualize)
   if example != none {
     if type(example) == dictionary {
@@ -80,9 +87,11 @@
     linebreak()
   }
 
-  let input = get-input(day)
-  let result = (func)(input)
-  show-result(result)
+  if not only-example {
+    let input = get-input(day)
+    let result = (func)(input)
+    show-result(result)
+  }
 }
 
 #let day-template(day, puzzle1, puzzle2, stars: 0) = {

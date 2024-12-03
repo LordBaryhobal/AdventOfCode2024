@@ -12,5 +12,5 @@
 #show-puzzle(
   3, 1,
   solve,
-  example: 161
+  example: ("1": 161)
 )
