@@ -122,7 +122,30 @@
   )
 }
 
-#let make-progress(links: true) = context {
+#let make-badge(name, img) = {
+  let img = scale(3em, img, reflow: true)
+  box(
+    grid(
+      columns: 2,
+      align: center + horizon,
+      column-gutter: 0.4em,
+      [*#name*],
+      box(
+        img,
+        radius: 1.5em,
+        clip: true
+      )
+    ),
+    fill: green.lighten(50%),
+    inset: (left: 0.8em),
+    radius: 1.5em
+  )
+}
+
+#let make-progress(
+  links: true,
+  badge: none
+) = context {
   let stars = star-state.final()
   let star-cnt = stars.values().sum(default: 0)
   let first-weekday = datetime(
@@ -149,7 +172,11 @@
     cells.push(cell)
   }
 
-  [*Stars: #star-cnt / 50*]
+  let badge = if badge != none {
+    make-badge(badge.name, badge.img)
+  }
+
+  [*Stars: #star-cnt / 50*#h(1fr)#badge]
   table(
     columns: (1fr,)*7,
     inset: 0.8em,

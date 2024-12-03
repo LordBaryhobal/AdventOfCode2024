@@ -10,4 +10,10 @@
   }
   return p
 })
-#make-progress(links: false)
+#make-progress(
+  links: false,
+  badge: (
+    name: "LordBaryhobal",
+    img: image("res/me.jpg", width: 3em)
+  )
+)
