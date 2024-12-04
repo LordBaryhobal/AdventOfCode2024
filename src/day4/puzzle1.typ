@@ -40,7 +40,7 @@
 
   let total = 0
   for y in range(h) {
-    for x in range(h) {
+    for x in range(w) {
       if lines.at(y).at(x) == "X" {
         total += check-xmas(lines, x, y)
       }
