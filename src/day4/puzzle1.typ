@@ -56,7 +56,7 @@
   let w = lines.first().len()
   let h = lines.len()
 
-  canvas({
+  canvas(length: 2em, {
     for y in range(h) {
       for x in range(w) {
         if lines.at(y).at(x) == "X" {

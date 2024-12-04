@@ -50,7 +50,7 @@
     }
   }
 
-  canvas({
+  canvas(length: 2em, {
     for y in range(h) {
       for x in range(w) {
         let valid = (x, y) in positions
