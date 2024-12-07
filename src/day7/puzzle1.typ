@@ -1,7 +1,7 @@
 #import "/src/utils.typ": *
 #import "@preview/cetz:0.3.1": canvas, draw
 
-#let solveable(values, target) = {
+#let solvable(values, target) = {
   if values.len() == 1 {
     return values.last() == target
   }
@@ -9,7 +9,7 @@
   let values = values
   let v = values.pop()
   if calc.rem(target, v) == 0 {
-    if solveable(values, target / v) {
+    if solvable(values, target / v) {
       return true
     }
   }
@@ -17,7 +17,7 @@
     return false
   }
 
-  return solveable(values, target - v)
+  return solvable(values, target - v)
 }
 
 #let solve(input) = {
@@ -29,7 +29,7 @@
     target = int(target)
     values = values.split(" ").map(int)
 
-    if solveable(values, target) {
+    if solvable(values, target) {
       total += target
     }
   }

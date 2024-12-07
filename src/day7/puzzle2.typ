@@ -5,7 +5,7 @@
   return int(str(a) + str(b))
 }
 
-#let solveable(values, target) = {
+#let solvable(values, target) = {
   if values.len() == 1 {
     return values.last() == target
   }
@@ -13,7 +13,7 @@
   let values = values
   let v = values.pop()
   if calc.rem(target, v) == 0 {
-    if solveable(values, target / v) {
+    if solvable(values, target / v) {
       return true
     }
   }
@@ -27,7 +27,7 @@
       0,
       str-target.len() - str-v.len()
     )
-    if solveable(values, int(target2)) {
+    if solvable(values, int(target2)) {
       return true
     }
   }
@@ -35,7 +35,7 @@
     return false
   }
 
-  return solveable(values, target - v)
+  return solvable(values, target - v)
 }
 
 #let solve(input) = {
@@ -47,7 +47,7 @@
     target = int(target)
     values = values.split(" ").map(int)
 
-    if solveable(values, target) {
+    if solvable(values, target) {
       total += target
     }
   }

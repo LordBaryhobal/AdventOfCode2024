@@ -17,7 +17,6 @@
 
 #v(2cm)
 
-/*
 #align(center, canvas({
   draw.merge-path(
     {
@@ -50,7 +49,7 @@
     fill: rgb("#63584B"),
     stroke: none
   )
-}))*/
+}))
 
 
 #v(1fr)
