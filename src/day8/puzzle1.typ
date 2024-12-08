@@ -49,7 +49,7 @@
   }
 }
 
-#let visualize(input) = {
+#let visualize(solve, input) = {
   let (grid, by-freq, antinodes) = solve(input, return-data: true)
   let w = grid.first().len()
   let h = grid.len()
@@ -58,7 +58,7 @@
   let n-freqs = freqs.len()
   let colors = gradient.linear(red, orange, yellow, green, aqua, blue, purple)
   
-  canvas(length: 1.75em, {
+  canvas(length: 1.85em, {
     for y in range(h) {
       for x in range(w) {
         draw.circle(
@@ -94,5 +94,5 @@
   8, 1,
   solve,
   example: 14,
-  visualize: visualize
+  visualize: visualize.with(solve)
 )

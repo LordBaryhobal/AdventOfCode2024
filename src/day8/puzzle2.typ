@@ -1,4 +1,5 @@
 #import "/src/utils.typ": *
+#import "puzzle1.typ": visualize
 
 #let in-grid(w, h, x, y) = {
   return 0 <= x and x < w and 0 <= y and y < h
@@ -27,7 +28,7 @@
   return antinodes
 }
 
-#let solve(input) = {
+#let solve(input, return-data: false) = {
   let by-freq = (:)
   let antinodes = ()
 
@@ -55,11 +56,17 @@
     }
   }
 
-  return antinodes.dedup().len()
+  antinodes = antinodes.dedup()
+  return if return-data {
+    (grid, by-freq, antinodes)
+  } else {
+    antinodes.len()
+  }
 }
 
 #show-puzzle(
   8, 2,
   solve,
-  example: 34
+  example: 34,
+  visualize: visualize.with(solve)
 )
