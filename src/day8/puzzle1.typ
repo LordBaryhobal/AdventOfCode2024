@@ -58,7 +58,7 @@
   let n-freqs = freqs.len()
   let colors = gradient.linear(red, orange, yellow, green, aqua, blue, purple)
   
-  canvas(length: 1.85em, {
+  canvas(length: 1.65em, {
     for y in range(h) {
       for x in range(w) {
         draw.circle(
@@ -73,7 +73,7 @@
           for (ax, ay) in by-freq.at(freq) {
             draw.circle(
               (ax, ay),
-              radius: 0.3,
+              radius: 0.4,
               fill: col
             )
           }
@@ -83,8 +83,8 @@
 
     for (anx, any) in antinodes {
       draw.rect(
-        (anx - 0.3, any - 0.3),
-        (anx + 0.3, any + 0.3),
+        (anx - 0.4, any - 0.4),
+        (anx + 0.4, any + 0.4),
       )
     }
   })
