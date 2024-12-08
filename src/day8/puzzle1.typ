@@ -1,10 +1,11 @@
 #import "/src/utils.typ": *
+#import "@preview/cetz:0.3.1": canvas, draw
 
 #let in-grid(w, h, x, y) = {
   return 0 <= x and x < w and 0 <= y and y < h
 }
 
-#let solve(input) = {
+#let solve(input, return-data: false) = {
   let by-freq = (:)
   let antinodes = ()
 
@@ -41,11 +42,57 @@
     }
   }
 
-  return antinodes.len()
+  return if return-data {
+    (grid, by-freq, antinodes)
+  } else {
+    antinodes.len()
+  }
+}
+
+#let visualize(input) = {
+  let (grid, by-freq, antinodes) = solve(input, return-data: true)
+  let w = grid.first().len()
+  let h = grid.len()
+
+  let freqs = by-freq.keys()
+  let n-freqs = freqs.len()
+  let colors = gradient.linear(red, orange, yellow, green, aqua, blue, purple)
+  
+  canvas(length: 1.75em, {
+    for y in range(h) {
+      for x in range(w) {
+        draw.circle(
+          (x, y),
+          radius: 0.1,
+          fill: gray,
+          stroke: none
+        )
+
+        for (i, freq) in freqs.enumerate() {
+          let col = colors.sample(i * 100% / n-freqs)
+          for (ax, ay) in by-freq.at(freq) {
+            draw.circle(
+              (ax, ay),
+              radius: 0.3,
+              fill: col
+            )
+          }
+        }
+      }
+    }
+
+    for (anx, any) in antinodes {
+      draw.rect(
+        (anx - 0.3, any - 0.3),
+        (anx + 0.3, any + 0.3),
+      )
+    }
+  })
 }
 
 #show-puzzle(
   8, 1,
   solve,
-  example: 14
+  example: 14,
+  visualize: visualize
 )
