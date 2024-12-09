@@ -72,32 +72,32 @@
   return compute-checksum(blocks)
 }
 
+#let col-gradient = gradient.linear(red, orange, yellow, green, aqua, blue, purple)
+
+#let show-fs(size, max-id, blocks) = {
+  let cells = ()
+  for (bi, bl, bid) in blocks {
+    cells.push(
+      grid.cell(
+        x: bi,
+        colspan: bl,
+        fill: col-gradient.sample(bid * 100% / max-id),
+        str(bid)
+      )
+    )
+  }
+  grid(
+    columns: (1fr,) * size,
+    align: center + horizon,
+    stroke: black,
+    inset: 0.3em,
+    ..cells
+  )
+}
+
 #let visualize(input) = {
   let (blocks, holes) = parse-input(input)
   let max-id = blocks.last().last()
-
-  let col-gradient = gradient.linear(red, orange, yellow, green, aqua, blue, purple)
-
-  let show-fs(size, blocks) = {
-    let cells = ()
-    for (bi, bl, bid) in blocks {
-      cells.push(
-        grid.cell(
-          x: bi,
-          colspan: bl,
-          fill: col-gradient.sample(bid * 100% / max-id),
-          str(bid)
-        )
-      )
-    }
-    grid(
-      columns: (1fr,) * size,
-      align: center + horizon,
-      stroke: black,
-      inset: 0.3em,
-      ..cells
-    )
-  }
 
   let last-block = blocks.last()
   let last-holes = holes.last()
@@ -105,7 +105,8 @@
     calc.max(
       last-block.first() + last-block.at(1),
       last-holes.first() + last-holes.last()
-    )
+    ),
+    max-id
   )
   let steps = ()
   steps.push(show-fs(blocks))

@@ -1,43 +1,9 @@
 #import "/src/utils.typ": *
-
-#let compute-checksum(blocks) = {
-  let total = 0
-  for (i0, l, id) in blocks {
-    total += id * range(i0, i0 + l).sum()
-  }
-  return total
-}
-
-#let insert(list, elmt) = {
-  for (i, elmt2) in list.enumerate() {
-    if elmt.first() < elmt2.first() {
-      list.insert(i, elmt)
-      return list
-    }
-  }
-  list.push(elmt)
-  return list
-}
+#import "puzzle1.typ": parse-input, compute-checksum, insert, show-fs
 
 #let solve(input) = {
-  let blocks = ()
-  let holes = ()
-
-  let block-i = 0
-  let is-block = true
-  let pos = 0
-  for c in input {
-    let size = int(c)
-    if is-block {
-      blocks.push((pos, size, block-i))
-      block-i += 1
-    } else {
-      holes.push((pos, size))
-    }
-    pos += int(c)
-    is-block = not is-block
-  }
-
+  let (blocks, holes) = parse-input(input)
+  
   let blocks2 = ()
   for (bi, bl, bid) in blocks.rev() {
     for (i, (hi, hl)) in holes.enumerate() {
@@ -57,6 +23,54 @@
   return compute-checksum(blocks2)
 }
 
+#let visualize(input) = {
+  let (blocks, holes) = parse-input(input)
+  let max-id = blocks.last().last()
+
+  let last-block = blocks.last()
+  let last-holes = holes.last()
+  let show-fs = show-fs.with(
+    calc.max(
+      last-block.first() + last-block.at(1),
+      last-holes.first() + last-holes.last()
+    ),
+    max-id
+  )
+  let steps = ()
+  steps.push(show-fs(blocks))
+
+  let ids = ()
+  let blocks2 = ()
+  for (bi, bl, bid) in blocks.rev() {
+    let moved = false
+    for (i, (hi, hl)) in holes.enumerate() {
+      if hi < bi and bl <= hl {
+        bi = hi
+        holes.at(i).first() += bl
+        holes.at(i).last() -= bl
+        if bl == hl {
+          _ = holes.remove(i)
+        }
+        moved = true
+        break
+      }
+    }
+    ids.push(bid)
+    blocks2.push((bi, bl, bid))
+    if moved {
+      steps.push(show-fs(
+        blocks.filter(b => b.last() not in ids) +
+        blocks2
+      ))
+    }
+  }
+
+  stack(
+    spacing: 0.5em,
+    ..steps
+  )
+}
+
 #show-puzzle(
   9, 2,
   solve,
@@ -64,7 +78,8 @@
     "1": 132,
     "2": 2858
   ),
-  only-example: true
+  only-example: true,
+  visualize: visualize
 )
 
 // Too long to recompile everytime
