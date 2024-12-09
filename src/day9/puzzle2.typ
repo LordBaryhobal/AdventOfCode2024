@@ -27,13 +27,12 @@
   let is-block = true
   let pos = 0
   for c in input {
-    let block = (pos, int(c))
+    let size = int(c)
     if is-block {
-      block.push(block-i)
+      blocks.push((pos, size, block-i))
       block-i += 1
-      blocks.push(block)
     } else {
-      holes.push(block)
+      holes.push((pos, size))
     }
     pos += int(c)
     is-block = not is-block
@@ -46,6 +45,9 @@
         bi = hi
         holes.at(i).first() += bl
         holes.at(i).last() -= bl
+        if bl == hl {
+          holes.remove(i)
+        }
         break
       }
     }
