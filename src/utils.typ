@@ -189,5 +189,10 @@
 
 #let template(body) = {
   set text(font: "Source Sans 3")
+  set page(
+    footer: context {
+      align(center, counter(page).display("1 / 1", both: true))
+    }
+  )
   body
 }
