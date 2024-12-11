@@ -1,4 +1,6 @@
 #import "/src/utils.typ": *
+#import "@preview/cetz:0.3.1": canvas
+#import "@preview/cetz-plot:0.1.0": plot
 
 #let process(rock) = {
   if rock == 0 {
@@ -33,8 +35,30 @@
   return rocks.len()
 }
 
+#let visualize(input) = {
+  let rocks = input.split(" ").map(int)
+  let values = (rocks.len(),)
+  for _ in range(25) {
+    rocks = blink(rocks)
+    values.push(rocks.len())
+  }
+  canvas({
+    plot.plot(
+      {
+        plot.add(range(26).zip(values))
+      },
+      size: (6,6),
+      x-tick-step: 5,
+      y-tick-step: 10000,
+      x-label: "Blinks",
+      y-label: "Rocks"
+    )
+  })
+}
+
 #show-puzzle(
   11, 1,
   solve,
-  example: 55312
+  example: 55312,
+  visualize: visualize
 )
