@@ -81,6 +81,12 @@
       for (suffix, result) in example.pairs() {
         check-example(day, func, result, suffix: suffix)
       }
+    } else if type(example) == array {
+      for ex in example {
+        let suffix = ex.at("suffix", default: none)
+        let args = ex.at("args", default: (:))
+        check-example(day, func.with(..args), ex.result, suffix: suffix)
+      }
     } else {
       check-example(day, func, example)
     }
