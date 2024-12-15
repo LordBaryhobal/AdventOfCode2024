@@ -6,11 +6,8 @@
   return calc.rem-euclid(v0 + dv * steps, max)
 }
 
-#let solve(w: 0, h: 0, steps: 100, input) = {
-  assert(w != 0, message: "Width must be != 0")
-  assert(h != 0, message: "Height must be != 0")
-
-  let bots = input.split("\n").map(b => {
+#let parse-input(input) = {
+  return input.split("\n").map(b => {
     let m = b.match(regexp)
     return (
       pos: (
@@ -23,6 +20,13 @@
       )
     )
   })
+}
+
+#let solve(w: 0, h: 0, steps: 100, input) = {
+  assert(w != 0, message: "Width must be != 0")
+  assert(h != 0, message: "Height must be != 0")
+
+  let bots = parse-input(input)
 
   let quadrants = (
     tl: 0,
