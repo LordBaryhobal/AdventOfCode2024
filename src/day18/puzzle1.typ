@@ -7,10 +7,6 @@
   (0, -1)
 )
 
-#let get-coords(x, y) = {
-  return str(x) + "/" + str(y)
-}
-
 #let get-lowest(nodes, scores) = {
   let lowest-score = none
   let lowest-i = none
@@ -41,8 +37,7 @@
   return path
 }
 
-#let find-path(w, h, grid, start: (0, 0), end: auto) = {
-  let end = if end == auto {(w - 1, h - 1)} else {end}
+#let find-path(w, h, grid) = {
   let end = (w - 1, h - 1)
   let (x, y) = (0, 0)
   let open = ((x, y),)
