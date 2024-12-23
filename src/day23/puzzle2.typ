@@ -33,6 +33,45 @@
   return longest
 }
 
+#let bron-kerbosch2(links, R, P, X) = {
+  if P.len() == 0 and X.len() == 0 {
+    return if R.len() > 2 {
+      R.sorted()
+    } else {
+      none
+    }
+  }
+
+  let pivot = if P.len() != 0 {
+    P.first()
+  } else {
+    X.first()
+  }
+  let pivot-neighbors = links.at(pivot)
+  let longest-len = 0
+  let longest = none
+  let to-visit = P.filter(n => n not in pivot-neighbors)
+  for v in to-visit {
+    let neighbors = links.at(v)
+    let clique = bron-kerbosch2(
+      links,
+      R + (v,),
+      P.filter(n => n in neighbors),
+      X.filter(n => n in neighbors)
+    )
+    if clique != none {
+      let l = clique.len()
+      if longest == none or l > longest-len {
+        longest = clique
+        longest-len = l
+      }
+    }
+    let _ = P.remove(P.position(n => n == v))
+    X.push(v)
+  }
+  return longest
+}
+
 #let solve(input) = {
   let links = input.split("\n")
 
@@ -51,7 +90,7 @@
     links-dict.at(b).push(a)
   }
 
-  let clique = bron-kerbosch(links-dict, (), links-dict.keys(), ())
+  let clique = bron-kerbosch2(links-dict, (), links-dict.keys(), ())
 
   return clique.join(",")
 }
